@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java-library'
+	id 'maven-publish'
+}
+
+group = 'ml.mizotakhteh'
+version = '0.0.4'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            artifact("build/libs/util-${version}-plain.jar") {
+                extension "jar"
+            }
+        }
+    }
+    repositories {
+        maven {
+            url 'https://maven.pkg.github.com/mizotakhteh/util'
+            name 'Github'
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+bootJar {
+	enabled = false
+}
